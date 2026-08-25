@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
+  <meta name="color-scheme" content="light">
+  <link rel="manifest" href="manifest.webmanifest">
+  <title>HTML 문서 편집기</title>
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/toss/tossface/dist/tossface.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.1/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/GmarketSans/subsets/GmarketSans-dynamic-subset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css">
+
+  <style id="dynamicPrintStyle">@page{size:210mm 297mm;margin:0}</style>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app" id="app">
+  <header class="titlebar desktop-only">
+    <div class="brand">H</div>
+    <div class="app-title">HTML 문서</div>
+    <div class="divider">|</div>
+    <span id="networkModeBadge" class="network-badge online">온라인</span>
+    <input id="documentTitle" class="document-title-input" value="새 문서 1" aria-label="문서 이름">
+    <div class="spacer"></div>
+    <div class="quick-actions">
+      <button class="icon-btn" id="newBtn" title="새 문서"><span>＋</span></button>
+      <button class="icon-btn" id="openBtn" title="열기"><span class="tossface">📂</span></button>
+      <button class="icon-btn" id="saveBtn" title="저장"><span class="tossface">💾</span></button>
+      <button class="icon-btn" id="undoBtn" title="실행 취소">↶</button>
+      <button class="icon-btn" id="redoBtn" title="다시 실행">↷</button>
+    </div>
+  </header>
+
+  <nav class="menubar desktop-only" id="menubar">
+    <button class="menu-tab" id="fileTab" data-tab="file">파일</button>
+    <button class="menu-tab active" data-tab="edit">편집</button>
+    <button class="menu-tab" data-tab="view">보기</button>
+    <button class="menu-tab" data-tab="insert">입력</button>
+    <button class="menu-tab" data-tab="format">서식</button>
+    <button class="menu-tab" data-tab="page">쪽</button>
+    <button class="menu-tab" data-tab="table">표</button>
+    <button class="menu-tab" data-tab="tools">도구</button>
+    <button class="menu-tab" data-tab="review">검토</button>
+  </nav>
+
+  <!-- EDIT ribbon -->
+  <section class="ribbon desktop-only ribbon-panel active" data-ribbon="edit">
+    <div class="ribbon-group">
+      <button class="large-tool" id="pasteBtn"><span class="large-icon tossface">📋</span><span>붙이기</span></button>
+      <div class="tool-stack">
+        <button class="small-tool" id="cutBtn"><span class="tossface">✂️</span> 잘라내기</button>
+        <button class="small-tool" id="copyBtn">▣ 복사</button>
+        <button class="small-tool" id="selectAllBtn">▤ 모두 선택</button>
+      </div>
+      <span class="group-label">클립보드</span>
+    </div>
+
+    <div class="ribbon-group font-ribbon">
+      <div class="favorite-fonts">
+        <button class="font-chip active" data-font="Pretendard Variable">Pretendard</button>
+        <button class="font-chip" data-font="Wanted Sans Variable">Wanted Sans [Variable]</button>
+        <button class="font-chip" data-font="Gmarket Sans">G마켓 산스</button>
+        <button class="font-chip" data-font="Paperlogy">Paperlogy</button>
+      </div>
+      <div class="font-controls">
+        <select id="styleSelect" title="스타일">
+          <option value="body">바탕글</option>
+          <option value="h1">제목 1</option>
+          <option value="h2">제목 2</option>
+          <option value="h3">제목 3</option>
+        </select>
+        <select id="fontFamily" title="글꼴"></select>
+        <div class="font-size-combo" id="fontSizeCombo">
+          <input id="fontSizeInput" type="number" inputmode="decimal" min="1" max="300" step="0.5" value="10" aria-label="글자 크기(pt)">
+          <span class="pt-label">pt</span>
+          <button id="fontSizeDropBtn" type="button" aria-label="글자 크기 목록">▾</button>
+          <div id="fontSizeMenu" class="font-size-menu">
+            <button data-size="8">8</button><button data-size="9">9</button><button data-size="10">10</button>
+            <button data-size="10.5">10.5</button><button data-size="11">11</button><button data-size="12">12</button>
+            <button data-size="14">14</button><button data-size="16">16</button><button data-size="18">18</button>
+            <button data-size="20">20</button><button data-size="24">24</button><button data-size="28">28</button>
+            <button data-size="32">32</button><button data-size="36">36</button><button data-size="48">48</button>
+            <button data-size="72">72</button>
+          </div>
+        </div>
+        <span class="font-count" id="fontCount"></span>
+      </div>
+      <div class="format-tools">
+        <button class="square-tool toggle-tool" data-command="bold"><b>가</b></button>
+        <button class="square-tool toggle-tool" data-command="italic"><i>가</i></button>
+        <button class="square-tool toggle-tool" data-command="underline"><u>가</u></button>
+        <button class="square-tool" data-command="strikeThrough"><s>가</s></button>
+        <label class="color-tool" title="글자색"><span>A</span><input id="textColor" type="color" value="#111111"></label>
+        <label class="color-tool" title="형광펜"><span class="tossface">🖍️</span><input id="highlightColor" type="color" value="#fff59d"></label>
+      </div>
+      <span class="group-label">글자</span>
+    </div>
+
+    <div class="ribbon-group">
+      <div class="tool-grid">
+        <button class="square-tool" data-command="justifyLeft">≡</button>
+        <button class="square-tool" data-command="justifyCenter">≣</button>
+        <button class="square-tool" data-command="justifyRight">≡</button>
+        <button class="square-tool" data-command="justifyFull">☰</button>
+        <button class="small-tool" data-command="insertUnorderedList">• 글머리표</button>
+        <button class="small-tool" data-command="insertOrderedList">1. 번호</button>
+        <button class="small-tool" id="indentBtn">→ 들여쓰기</button>
+        <button class="small-tool" id="outdentBtn">← 내어쓰기</button>
+      </div>
+      <span class="group-label">문단</span>
+    </div>
+  </section>
+
+  <!-- VIEW ribbon -->
+  <section class="ribbon desktop-only ribbon-panel" data-ribbon="view">
+    <div class="ribbon-group">
+      <button class="large-tool" id="view100Btn"><span class="large-icon">100%</span><span>실제 크기</span></button>
+      <button class="large-tool" id="fitWidthBtn"><span class="large-icon">↔</span><span>쪽 너비</span></button>
+      <button class="large-tool" id="zoomInRibbonBtn"><span class="large-icon">＋</span><span>확대</span></button>
+      <button class="large-tool" id="zoomOutRibbonBtn"><span class="large-icon">−</span><span>축소</span></button>
+      <span class="group-label">확대/축소</span>
+    </div>
+    <div class="ribbon-group">
+      <button class="large-tool" id="toggleRulerBtn"><span class="large-icon">📏</span><span>눈금자</span></button>
+      <button class="large-tool" id="togglePageShadowBtn"><span class="large-icon">▣</span><span>쪽 그림자</span></button>
+      <span class="group-label">표시</span>
+    </div>
+  </section>
+
+  <!-- INSERT ribbon -->
+  <section class="ribbon desktop-only ribbon-panel" data-ribbon="insert">
+    <div class="ribbon-group">
+      <button class="large-tool" id="insertTableBtn"><span class="large-icon">▦</span><span>표</span></button>
+      <button class="large-tool" id="insertImageBtn"><span class="large-icon tossface">🖼️</span><span>그림</span></button>
+      <button class="large-tool" id="insertLinkBtn"><span class="large-icon">🔗</span><span>링크</span></button>
+      <button class="large-tool" id="horizontalRuleBtn"><span class="large-icon">—</span><span>가로줄</span></button>
+      <span class="group-label">기본 입력</span>
+    </div>
+
+    <div class="ribbon-group html-only-group">
+      <button class="large-tool" id="insertIframeBtn"><span class="large-icon">▣</span><span>iframe</span></button>
+      <button class="large-tool" id="insertVideoBtn"><span class="large-icon">▶</span><span>비디오</span></button>
+      <button class="large-tool" id="insertAudioBtn"><span class="large-icon">♪</span><span>오디오</span></button>
+      <button class="large-tool" id="insertDetailsBtn"><span class="large-icon">⌄</span><span>접기/펼치기</span></button>
+      <button class="large-tool" id="insertCodeBtn"><span class="large-icon">&lt;/&gt;</span><span>코드 블록</span></button>
+      <span class="group-label">HTML 전용</span>
+    </div>
+  </section>
+
+  <!-- FORMAT ribbon -->
+  <section class="ribbon desktop-only ribbon-panel" data-ribbon="format">
+    <div class="ribbon-group">
+      <button class="large-tool" id="lineHeightBtn"><span class="large-icon">↕</span><span>줄 간격</span></button>
+      <button class="large-tool" id="clearFormatBtn"><span class="large-icon">Tx</span><span>서식 지우기</span></button>
+      <button class="large-tool" id="supBtn"><span class="large-icon">x²</span><span>위 첨자</span></button>
+      <button class="large-tool" id="subBtn"><span class="large-icon">x₂</span><span>아래 첨자</span></button>
+      <span class="group-label">서식</span>
+    </div>
+  </section>
+
+  <!-- PAGE ribbon -->
+  <section class="ribbon desktop-only ribbon-panel" data-ribbon="page">
+    <div class="ribbon-group">
+      <button class="large-tool" id="pageSetupBtn"><span class="large-icon tossface">📄</span><span>편집 용지</span></button>
+      <button class="large-tool" id="pageSizeBtn"><span class="large-icon">A4</span><span>용지 크기</span></button>
+      <button class="large-tool" id="orientationBtn"><span class="large-icon">↻</span><span>방향 전환</span></button>
+      <button class="large-tool" id="pageBreakBtn"><span class="large-icon">↵</span><span>쪽 나누기</span></button>
+      <button class="large-tool" id="printBtn"><span class="large-icon tossface">🖨️</span><span>인쇄</span></button>
+      <span class="group-label">쪽</span>
+    </div>
+  </section>
+
+  <!-- TABLE ribbon -->
+  <section class="ribbon desktop-only ribbon-panel" data-ribbon="table">
+    <div class="ribbon-group">
+      <button class="large-tool" id="tableInsertBtn"><span class="large-icon">▦</span><span>표 만들기</span></button>
+      <button class="large-tool" id="rowBelowBtn"><span class="large-icon">＋↓</span><span>아래 행</span></button>
+      <button class="large-tool" id="colRightBtn"><span class="large-icon">＋→</span><span>오른쪽 열</span></button>
+      <button class="large-tool danger-tool" id="deleteRowBtn"><span class="large-icon">−↓</span><span>행 삭제</span></button>
+      <button class="large-tool danger-tool" id="deleteColBtn"><span class="large-icon">−→</span><span>열 삭제</span></button>
+      <span class="group-label">행/열</span>
+    </div>
+  </section>
+
+  <!-- TOOLS ribbon -->
+  <section class="ribbon desktop-only ribbon-panel" data-ribbon="tools">
+    <div class="ribbon-group">
+      <button class="large-tool" id="findBtn"><span class="large-icon">🔎</span><span>찾기</span></button>
+      <button class="large-tool" id="replaceBtn"><span class="large-icon">↔</span><span>찾아 바꾸기</span></button>
+      <button class="large-tool" id="sourceBtn"><span class="large-icon">&lt;/&gt;</span><span>HTML 원본</span></button>
+      <button class="large-tool" id="previewBtn"><span class="large-icon">◉</span><span>HTML 미리보기</span></button>
+      <span class="group-label">도구</span>
+    </div>
+  </section>
+
+  <!-- REVIEW ribbon -->
+  <section class="ribbon desktop-only ribbon-panel" data-ribbon="review">
+    <div class="ribbon-group">
+      <button class="large-tool" id="documentInfoBtn"><span class="large-icon">ⓘ</span><span>문서 정보</span></button>
+      <button class="large-tool" id="spellcheckBtn"><span class="large-icon">ABC✓</span><span>맞춤법 표시</span></button>
+      <button class="large-tool" id="offlineInstallBtn"><span class="large-icon tossface">⬇️</span><span>오프라인 설치</span></button>
+      <span class="group-label">검토 · 오프라인</span>
+    </div>
+  </section>
+
+  <!-- Mobile top -->
+  <header class="mobile-topbar mobile-only">
+    <button class="mobile-icon-btn" id="mobileMenuBtn">☰</button>
+    <div class="mobile-title">
+      <strong id="mobileTitle">새 문서 1.html</strong>
+      <small id="mobileSaveState">저장됨</small>
+      <small id="mobileNetworkMode" class="mobile-network-mode">온라인</small>
+    </div>
+    <button class="mobile-icon-btn" id="mobileUndoBtn">↶</button>
+    <button class="mobile-icon-btn" id="mobileSaveBtn"><span class="tossface">💾</span></button>
+  </header>
+
+  <div class="mobile-formatbar mobile-only">
+    <select id="mobileFontFamily" aria-label="글꼴"></select>
+    <select id="mobileFontSize" aria-label="글자 크기">
+      <option>9</option><option selected>10</option><option>11</option><option>12</option>
+      <option>14</option><option>16</option><option>18</option><option>24</option><option>32</option>
+    </select>
+    <button data-command="bold"><b>B</b></button>
+    <button data-command="italic"><i>I</i></button>
+    <button data-command="underline"><u>U</u></button>
+    <button data-command="justifyLeft">≡</button>
+    <button data-command="justifyCenter">≣</button>
+    <button id="mobileMoreFormatBtn">더보기</button>
+  </div>
+
+  <main class="workspace">
+    <aside class="vertical-ruler desktop-only" id="verticalRuler"></aside>
+    <div class="workspace-main">
+      <div class="horizontal-ruler desktop-only" id="horizontalRulerWrap">
+        <div class="ruler-paper" id="horizontalRuler"></div>
+      </div>
+
+      <div class="page-scroll" id="pageScroll">
+        <div class="page-stack" id="pageStack">
+        <section class="paper" id="paper" data-page="1">
+          <article id="editor" class="page-editor imdoc-document" contenteditable="true" spellcheck="true" aria-label="문서 편집 영역">
+            <h1>HTML 문서 편집기</h1>
+            <p>HTML 형식으로 저장되는 실제 문서 편집기입니다.</p>
+            <p>그림과 iframe은 글자 흐름과 독립적으로 글자 위에 띄워 놓고 자유롭게 이동하거나 크기를 조절할 수 있습니다.</p>
+          </article>
+        </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="statusbar desktop-only">
+    <div class="status-item" id="pageStatus">A4 · 세로</div>
+    <div class="status-item">1단</div>
+    <div class="status-item" id="charCount">0자</div>
+    <div class="status-item">삽입</div>
+    <div class="status-spacer"></div>
+    <div class="status-item" id="saveStatus">저장됨</div>
+    <div class="zoom-control">
+      <button id="zoomOutBtn">−</button><span id="zoomText">100%</span>
+      <input id="zoomRange" type="range" min="50" max="160" value="100">
+      <button id="zoomInBtn">＋</button>
+    </div>
+  </footer>
+
+  <nav class="mobile-bottomnav mobile-only">
+    <button class="active" data-mobile-action="edit"><span class="nav-icon">✏️</span><span>편집</span></button>
+    <button data-mobile-action="table"><span class="nav-icon">▦</span><span>표</span></button>
+    <button data-mobile-action="insert"><span class="nav-icon">＋</span><span>입력</span></button>
+    <button data-mobile-action="page"><span class="nav-icon tossface">📄</span><span>쪽</span></button>
+    <button data-mobile-action="more"><span class="nav-icon">•••</span><span>더보기</span></button>
+  </nav>
+</div>
+
+<input id="openFileInput" type="file" accept=".html,.htm,text/html" hidden>
+<input id="imageFileInput" type="file" accept="image/*" hidden>
+
+<!-- Desktop anchored dropdown -->
+<div class="desktop-dropdown" id="desktopDropdown" role="menu"></div>
+
+<!-- Mobile only bottom sheet -->
+<div class="sheet-backdrop" id="sheetBackdrop">
+  <section class="bottom-sheet">
+    <div class="sheet-handle"></div>
+    <h2 id="sheetTitle">메뉴</h2>
+    <div class="sheet-actions" id="sheetActions"></div>
+    <button class="sheet-close" id="sheetCloseBtn">닫기</button>
+  </section>
+</div>
+
+<!-- All confirmations/prompts/save names live here; no browser confirm/prompt -->
+<div class="dialog-backdrop" id="dialogBackdrop">
+  <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
+    <header>
+      <h2 id="dialogTitle">설정</h2>
+      <button id="dialogCloseBtn" aria-label="닫기">×</button>
+    </header>
+    <div id="dialogBody" class="dialog-body"></div>
+  </section>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="editor.js"></script>
+</body>
+</html>

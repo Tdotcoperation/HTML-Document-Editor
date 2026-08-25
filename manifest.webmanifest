@@ -1,0 +1,10 @@
+{
+  "name": "HTML 문서 편집기",
+  "short_name": "HTML 문서",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#cfd2d6",
+  "theme_color": "#ffffff",
+  "description": "HTML 형식으로 저장되는 오프라인 지원 문서 편집기"
+}

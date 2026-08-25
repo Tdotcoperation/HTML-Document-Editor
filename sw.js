@@ -1,3 +1,4 @@
+const SW_BUILD="4.0.2";
 const OFFLINE_CACHE_PREFIX="imdoc-offline-v";
 
 async function newestOfflineCacheName(){
@@ -14,12 +15,10 @@ self.addEventListener("fetch",event=>{
   if(req.method!=="GET")return;
 
   event.respondWith((async()=>{
-    // Online: always prefer the current online version.
     try{
       return await fetch(req);
     }catch(_){
-      // Offline: use explicitly installed resources.
-      const cached=await caches.match(req);
+      const cached=await caches.match(req,{ignoreSearch:true});
       if(cached)return cached;
 
       if(req.mode==="navigate"){
@@ -27,7 +26,7 @@ self.addEventListener("fetch",event=>{
         if(cacheName){
           const cache=await caches.open(cacheName);
           const indexUrl=new URL("./index.html",self.registration.scope).href;
-          const fallback=await cache.match(indexUrl)||await cache.match("./index.html");
+          const fallback=await cache.match(indexUrl,{ignoreSearch:true})||await cache.match("./index.html",{ignoreSearch:true});
           if(fallback)return fallback;
         }
       }

@@ -49,7 +49,6 @@
     <button class="menu-tab" data-tab="review">검토</button>
   </nav>
 
-  <!-- EDIT ribbon -->
   <section class="ribbon desktop-only ribbon-panel active" data-ribbon="edit">
     <div class="ribbon-group">
       <button class="large-tool" id="pasteBtn"><span class="large-icon tossface">📋</span><span>붙이기</span></button>
@@ -117,7 +116,6 @@
     </div>
   </section>
 
-  <!-- VIEW ribbon -->
   <section class="ribbon desktop-only ribbon-panel" data-ribbon="view">
     <div class="ribbon-group">
       <button class="large-tool" id="view100Btn"><span class="large-icon">100%</span><span>실제 크기</span></button>
@@ -133,7 +131,6 @@
     </div>
   </section>
 
-  <!-- INSERT ribbon -->
   <section class="ribbon desktop-only ribbon-panel" data-ribbon="insert">
     <div class="ribbon-group">
       <button class="large-tool" id="insertTableBtn"><span class="large-icon">▦</span><span>표</span></button>
@@ -142,7 +139,6 @@
       <button class="large-tool" id="horizontalRuleBtn"><span class="large-icon">—</span><span>가로줄</span></button>
       <span class="group-label">기본 입력</span>
     </div>
-
     <div class="ribbon-group html-only-group">
       <button class="large-tool" id="insertIframeBtn"><span class="large-icon">▣</span><span>iframe</span></button>
       <button class="large-tool" id="insertVideoBtn"><span class="large-icon">▶</span><span>비디오</span></button>
@@ -153,7 +149,6 @@
     </div>
   </section>
 
-  <!-- FORMAT ribbon -->
   <section class="ribbon desktop-only ribbon-panel" data-ribbon="format">
     <div class="ribbon-group">
       <button class="large-tool" id="lineHeightBtn"><span class="large-icon">↕</span><span>줄 간격</span></button>
@@ -164,7 +159,6 @@
     </div>
   </section>
 
-  <!-- PAGE ribbon -->
   <section class="ribbon desktop-only ribbon-panel" data-ribbon="page">
     <div class="ribbon-group">
       <button class="large-tool" id="pageSetupBtn"><span class="large-icon tossface">📄</span><span>편집 용지</span></button>
@@ -176,7 +170,6 @@
     </div>
   </section>
 
-  <!-- TABLE ribbon -->
   <section class="ribbon desktop-only ribbon-panel" data-ribbon="table">
     <div class="ribbon-group">
       <button class="large-tool" id="tableInsertBtn"><span class="large-icon">▦</span><span>표 만들기</span></button>
@@ -188,7 +181,6 @@
     </div>
   </section>
 
-  <!-- TOOLS ribbon -->
   <section class="ribbon desktop-only ribbon-panel" data-ribbon="tools">
     <div class="ribbon-group">
       <button class="large-tool" id="findBtn"><span class="large-icon">🔎</span><span>찾기</span></button>
@@ -199,7 +191,6 @@
     </div>
   </section>
 
-  <!-- REVIEW ribbon -->
   <section class="ribbon desktop-only ribbon-panel" data-ribbon="review">
     <div class="ribbon-group">
       <button class="large-tool" id="documentInfoBtn"><span class="large-icon">ⓘ</span><span>문서 정보</span></button>
@@ -209,7 +200,6 @@
     </div>
   </section>
 
-  <!-- Mobile top -->
   <header class="mobile-topbar mobile-only">
     <button class="mobile-icon-btn" id="mobileMenuBtn">☰</button>
     <div class="mobile-title">
@@ -241,7 +231,6 @@
       <div class="horizontal-ruler desktop-only" id="horizontalRulerWrap">
         <div class="ruler-paper" id="horizontalRuler"></div>
       </div>
-
       <div class="page-scroll" id="pageScroll">
         <div class="page-stack" id="pageStack">
         <section class="paper" id="paper" data-page="1">
@@ -281,11 +270,7 @@
 
 <input id="openFileInput" type="file" accept=".html,.htm,text/html" hidden>
 <input id="imageFileInput" type="file" accept="image/*" hidden>
-
-<!-- Desktop anchored dropdown -->
 <div class="desktop-dropdown" id="desktopDropdown" role="menu"></div>
-
-<!-- Mobile only bottom sheet -->
 <div class="sheet-backdrop" id="sheetBackdrop">
   <section class="bottom-sheet">
     <div class="sheet-handle"></div>
@@ -294,8 +279,6 @@
     <button class="sheet-close" id="sheetCloseBtn">닫기</button>
   </section>
 </div>
-
-<!-- All confirmations/prompts/save names live here; no browser confirm/prompt -->
 <div class="dialog-backdrop" id="dialogBackdrop">
   <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
     <header>
@@ -305,9 +288,8 @@
     <div id="dialogBody" class="dialog-body"></div>
   </section>
 </div>
-
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
 <script src="editor.js"></script>
+<script src="offline-fix.js?v=4.0.2"></script>
 </body>
 </html>

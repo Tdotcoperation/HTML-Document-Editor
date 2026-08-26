@@ -139,6 +139,7 @@
       <button class="large-tool" id="horizontalRuleBtn"><span class="large-icon">—</span><span>가로줄</span></button>
       <span class="group-label">기본 입력</span>
     </div>
+
     <div class="ribbon-group html-only-group">
       <button class="large-tool" id="insertIframeBtn"><span class="large-icon">▣</span><span>iframe</span></button>
       <button class="large-tool" id="insertVideoBtn"><span class="large-icon">▶</span><span>비디오</span></button>
@@ -231,6 +232,7 @@
       <div class="horizontal-ruler desktop-only" id="horizontalRulerWrap">
         <div class="ruler-paper" id="horizontalRuler"></div>
       </div>
+
       <div class="page-scroll" id="pageScroll">
         <div class="page-stack" id="pageStack">
         <section class="paper" id="paper" data-page="1">
@@ -270,7 +272,9 @@
 
 <input id="openFileInput" type="file" accept=".html,.htm,text/html" hidden>
 <input id="imageFileInput" type="file" accept="image/*" hidden>
+
 <div class="desktop-dropdown" id="desktopDropdown" role="menu"></div>
+
 <div class="sheet-backdrop" id="sheetBackdrop">
   <section class="bottom-sheet">
     <div class="sheet-handle"></div>
@@ -279,6 +283,7 @@
     <button class="sheet-close" id="sheetCloseBtn">닫기</button>
   </section>
 </div>
+
 <div class="dialog-backdrop" id="dialogBackdrop">
   <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
     <header>
@@ -288,8 +293,10 @@
     <div id="dialogBody" class="dialog-body"></div>
   </section>
 </div>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script src="editor.js"></script>
-<script src="offline-fix.js?v=4.0.2"></script>
+
+<script src="editor.js?v=4.0.4"></script>
+<script src="offline-fix.js?v=4.0.4"></script>
 </body>
 </html>

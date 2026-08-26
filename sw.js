@@ -1,4 +1,4 @@
-const SW_BUILD="4.0.3";
+const SW_BUILD="4.0.4";
 const OFFLINE_CACHE_PREFIX="imdoc-offline-v";
 const SHELL_CACHE=`imdoc-shell-v${SW_BUILD}`;
 const SHELL_FILES=[
@@ -6,7 +6,7 @@ const SHELL_FILES=[
   "./index.html",
   "./style.css",
   "./editor.js",
-  "./offline-fix.js?v=4.0.2",
+  "./offline-fix.js?v=4.0.4",
   "./version.json",
   "./manifest.webmanifest"
 ];
@@ -81,36 +81,34 @@ self.addEventListener("message",event=>{
 });
 
 self.addEventListener("fetch",event=>{
-  const request=event.request;
-  if(request.method!=="GET")return;
+  const req=event.request;
+  if(req.method!=="GET")return;
 
-  if(request.mode==="navigate"){
+  if(req.mode==="navigate"){
     event.respondWith((async()=>{
       try{
-        const network=await fetch(request);
-        if(network)return network;
-      }catch(_){}
-
-      const fallback=await navigationFallback(request);
-      if(fallback)return fallback;
-
-      return new Response(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>오프라인</title><style>body{font-family:system-ui,sans-serif;margin:0;padding:32px;background:#f5f6f8;color:#222}main{max-width:640px;margin:80px auto;background:white;padding:28px;border-radius:14px}h1{font-size:22px}</style><main><h1>오프라인 편집기를 찾지 못했습니다.</h1><p>인터넷에 다시 연결한 뒤 HTML 문서 편집기를 한 번 열고, 검토 → 오프라인 설치를 다시 실행해 주세요.</p></main>`,{
-        status:200,
-        headers:{"Content-Type":"text/html; charset=utf-8"}
-      });
+        return await fetch(req);
+      }catch(_){
+        const fallback=await navigationFallback(req);
+        if(fallback)return fallback;
+        return new Response("오프라인 설치본을 찾을 수 없습니다.",{
+          status:503,
+          headers:{"Content-Type":"text/plain; charset=utf-8"}
+        });
+      }
     })());
     return;
   }
 
   event.respondWith((async()=>{
     try{
-      return await fetch(request);
+      return await fetch(req);
     }catch(_){
-      let cached=await matchInstalled(request,{ignoreSearch:true});
-      if(cached)return cached;
-      cached=await matchShell(request,{ignoreSearch:true});
-      if(cached)return cached;
-      return new Response("오프라인 상태이며 이 리소스는 설치된 캐시에 없습니다.",{
+      let hit=await matchInstalled(req,{ignoreSearch:true});
+      if(hit)return hit;
+      hit=await matchShell(req,{ignoreSearch:true});
+      if(hit)return hit;
+      return new Response("오프라인 상태이며 이 리소스는 오프라인 패키지에 없습니다.",{
         status:503,
         headers:{"Content-Type":"text/plain; charset=utf-8"}
       });

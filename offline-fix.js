@@ -1,7 +1,7 @@
 (() => {
   "use strict";
 
-  const FIX_VERSION = "4.0.2";
+  const FIX_VERSION = "4.0.4";
   const CACHE_PREFIX = "imdoc-offline-v";
   const EST_MIN_MB = 80;
   const EST_MAX_MB = 250;
